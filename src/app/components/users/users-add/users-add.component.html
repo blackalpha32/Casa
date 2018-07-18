@@ -1,0 +1,116 @@
+<div class="Form-Container">
+  <h1>{{titleForm}}</h1>
+  <br>
+  <form #userForm [formGroup]="registrationFormGroup" (ngSubmit)="onSubmit(userForm)" fxLayout="column">
+
+    <!-- <input type="hidden" name="UserID" #UserID="ngModel" [(ngModel)]="userService.selectedUser.UserID"> -->
+
+    <!-- UserID -->
+    <div class="form-group">
+      <input type="hidden" name="UserID" #UserID formControlName="UserID">
+    </div>
+
+    <!-- First Name -->
+    <mat-form-field class="form-group">
+      <input matInput maxlength="150" placeholder="First Name" name="FirstName" #FirstName formControlName="FirstName" pattern="^[a-zA-Z0-9].*"
+        required>
+      <mat-hint align="end">{{FirstName.value?.length || 0}}/150</mat-hint>
+      <mat-error *ngIf="registrationFormGroup.controls.FirstName.errors?.required && registrationFormGroup.controls.FirstName.touched">This Field is Required.</mat-error>
+    </mat-form-field>
+
+    <!-- Last Name -->
+    <mat-form-field class="form-group">
+      <input matInput maxlength="150" placeholder="Last Name" name="LastName" #LastName formControlName="LastName" required>
+      <mat-hint align="end">{{LastName.value?.length || 0}}/150</mat-hint>
+      <mat-error *ngIf="registrationFormGroup.controls.LastName.errors?.required && registrationFormGroup.controls.LastName.touched">This Field is Required.</mat-error>
+    </mat-form-field>
+
+    <div class="date-content" fxLayout="row" fxLayout.xs="column" fxLayout.sm="column" fxLayoutAlign.gt-xs="space-between start"
+      fxLayoutAlign.md="space-between start">
+
+      <!-- Email -->
+      <mat-form-field class="form-group">
+        <input type="email" matInput maxlength="150" placeholder="Email" name="Email" #Email formControlName="Email" pattern="^[a-zA-Z0-9].*"
+          [email]="true" required>
+        <mat-hint align="end">{{Email.value?.length || 0}}/150</mat-hint>
+        <mat-error *ngIf="registrationFormGroup.controls.Email.errors?.required && registrationFormGroup.controls.Email.touched">This Field is Required.</mat-error>
+      </mat-form-field>
+
+      <!-- Role -->
+      <mat-form-field class="form-group">
+        <mat-select placeholder="Select Role" name="RoleID" #RoleID formControlName="RoleID" required>
+          <mat-option *ngFor="let role of ListRole" [value]="role.RoleID">
+            {{role.Description}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="registrationFormGroup.controls.RoleID.errors?.required && registrationFormGroup.controls.RoleID.touched">Please select a Role.</mat-error>
+      </mat-form-field>
+
+    </div>
+
+    <!-- Company -->
+    <mat-form-field class="form-group">
+      <input matInput maxlength="150" placeholder="Company" name="Company" #Company formControlName="Company" pattern="^[a-zA-Z0-9].*">
+      <mat-hint align="end">{{Company.value?.length || 0}}/150</mat-hint>
+      <mat-error *ngIf="registrationFormGroup.controls.Company.errors?.required && registrationFormGroup.controls.Company.touched">This Field is Required.</mat-error>
+    </mat-form-field>
+
+    <div class="date-content" fxLayout="row" fxLayout.xs="column" fxLayout.sm="column" fxLayoutAlign.gt-xs="space-between start"
+      fxLayoutAlign.md="space-between start">
+
+      <!-- Phone -->
+      <mat-form-field class="form-group">
+        <input type="tel" matInput maxlength="20" placeholder="Phone" name="Phone" #Phone formControlName="Phone" pattern="[-0-9()+ ]+">
+        <!-- +(123)123-456-7890  -->
+        <mat-hint align="end">{{Phone.value?.length || 0}}/20</mat-hint>
+        <mat-error *ngIf="registrationFormGroup.controls.Phone.errors?.required && registrationFormGroup.controls.Phone.touched">This Field is Required.</mat-error>
+      </mat-form-field>
+
+
+      <!-- Mobile -->
+      <mat-form-field class="form-group">
+        <input matInput maxlength="20" placeholder="Mobile" name="Mobile" #Mobile formControlName="Mobile" pattern="[-0-9()+ ]+">
+        <mat-hint align="end">{{Mobile.value?.length || 0}}/20</mat-hint>
+        <mat-error *ngIf="registrationFormGroup.controls.Mobile.errors?.required && registrationFormGroup.controls.Mobile.touched">This Field is Required.</mat-error>
+      </mat-form-field>
+    </div>
+
+    <!-- Username -->
+    <mat-form-field class="form-group">
+      <input matInput maxlength="25" placeholder="Username" name="Username" #Username formControlName="Username" pattern="^[a-zA-Z0-9].*"
+        required>
+      <mat-hint align="end">{{Username.value?.length || 0}}/25</mat-hint>
+      <mat-error *ngIf="registrationFormGroup.controls.Username.errors?.required && registrationFormGroup.controls.Username.touched">This Field is Required.</mat-error>
+    </mat-form-field>
+
+    <div fxLayout="column" [formGroup]="passwordFormGroup">
+
+      <!-- Password -->
+      <mat-form-field class="form-group">
+        <input matInput minlength="1" type="password" matInput maxlength="25" placeholder="Password" name="Password" #Password formControlName="password"
+          required>
+        <mat-hint align="end">{{Password.value?.length || 0}}/25</mat-hint>
+        <mat-error *ngIf="passwordFormGroup.controls.password.errors?.required && passwordFormGroup.controls.password.touched">Password is required</mat-error>
+      </mat-form-field>
+
+      <!-- ConfirmPassword -->
+      <mat-form-field class="form-group">
+        <input matInput type="password" matInput maxlength="25" placeholder="ConfirmPassword" name="ConfirmPassword" #ConfirmPassword formControlName="repeatPassword">
+        <mat-hint align="end">{{ConfirmPassword.value?.length || 0}}/25</mat-hint>
+        <mat-error class="bg-danger" *ngIf="passwordFormGroup.controls.repeatPassword.errors?.required && passwordFormGroup.controls.repeatPassword.touched">Repeat password is required</mat-error>
+        <mat-error *ngIf="passwordFormGroup.errors?.doesMatchPassword">Password does not match</mat-error>
+      </mat-form-field>
+
+    </div>
+
+    <br>
+    <mat-checkbox name="Status" #Status [(ngModel)]="userService.selectedUser.Status" color="primary">Active</mat-checkbox>
+
+    <br>
+    <div fxLayout="row" fxLayoutGap="1em" class="form-options">
+      <button mat-raised-button color="primary" type="submit" [disabled]="!registrationFormGroup.valid" type="submit">Save</button>
+      <a mat-raised-button color="warn" routerLink="/User">Cancel</a>
+    </div>
+  </form>
+
+</div>
